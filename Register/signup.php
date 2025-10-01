@@ -59,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: Database connection failed.<br>";
     }
 }
-
 ?>
 
 <!DOCTYPE html>

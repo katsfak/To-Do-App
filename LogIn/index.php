@@ -14,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "SELECT * FROM users WHERE username = '" . $_POST['username'] . "'";
         $result = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($result);
-        if($num == 1){
-            while($row = mysqli_fetch_assoc($result)){
+        if ($num == 1) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 $id = $row['id'];
                 $fullname = $row['fullname'];
                 $hashed_password = $row['password'];
@@ -44,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo "Error: Username not found.<br>";
         }
-            
     }
 }
 
