@@ -1,3 +1,65 @@
+<?php
+$errors = [];
+$success = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name             = trim($_POST['name'] ?? '');
+    $username         = trim($_POST['username'] ?? '');
+    $email            = trim($_POST['email'] ?? '');
+    $password         = $_POST['password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
+
+    // Έλεγχοι
+    if (empty($name) || empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+        $errors[] = "All fields are required.";
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format.";
+    }
+
+    if ($password !== $confirm_password) {
+        $errors[] = "Passwords do not match.";
+    }
+
+    if (strlen($password) < 6) {
+        $errors[] = "Password must be at least 6 characters long.";
+    }
+
+    // Αν δεν υπάρχουν errors → έλεγχος στη βάση
+    if (empty($errors)) {
+        require_once '../config.php';
+
+        if ($conn) {
+            $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+            $stmt->bind_param("ss", $username, $email);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                $errors[] = "Username or email already taken.";
+            } else {
+                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+                $created_at = date("Y-m-d H:i:s");
+
+                $stmt = $conn->prepare("INSERT INTO users (fullname, username, email, password, created_at) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssss", $name, $username, $email, $hashed_password, $created_at);
+
+                if ($stmt->execute()) {
+                    $success = "Registration successful! <a href='../LogIn/index.php'>Log in here</a>.";
+                } else {
+                    $errors[] = "Error during registration. Please try again.";
+                }
+            }
+
+            $stmt->close();
+            $conn->close();
+        } else {
+            $errors[] = "Database connection failed. Please try again later.";
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,76 +73,37 @@
 <body>
     <div class="signup-container">
         <h2>Sign Up</h2>
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'];
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $confirm_password = $_POST['confirm_password'];
 
-            $errors = array();
+        <!-- Εμφάνιση Errors -->
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger">
+                <?php foreach ($errors as $error): ?>
+                    <p><?php echo htmlspecialchars($error); ?></p>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-            if (empty($name) || empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-                array_push($errors, "All fields are required.");
-            }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                array_push($errors, "Invalid email format.");
-            }
-            if ($password !== $confirm_password) {
-                array_push($errors, "Passwords do not match.");
-                
-            }
-            if (strlen($password) < 6) {
-                array_push($errors, "Password must be at least 6 characters long.");
-            }
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
-                    echo "<div class='alert alert-danger'>$error</div>";
-                }
-            } else {
-                require_once '../config.php';
-                // Check if username or email already exists
-                $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
-                $stmt->bind_param("ss", $username, $email);
-                $stmt->execute();
-                $stmt->store_result();
-                if ($stmt->num_rows > 0) {
-                    $errors[] = "Username or email already taken.";
-                } else {
-                    // Hash the password
-                    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-                    $created_at = date("Y-m-d H:i:s");
-                    // Insert new user
-                    $stmt = $conn->prepare("INSERT INTO users (fullname, username, email, password, created_at) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->bind_param("sssss", $name, $username, $email, $hashed_password, $created_at);
-                    if ($stmt->execute()) {
-                        echo "<p class='success'>Registration successful! <a href='../LogIn/index.php'>Log in here</a>.</p>";
-                    } else {
-                        array_push($errors, "Error during registration. Please try again.");
-                    }
-                }
-                $stmt->close();
-            }
+        <!-- Εμφάνιση Success -->
+        <?php if (!empty($success)): ?>
+            <div class="alert success">
+                <p><?php echo $success; ?></p>
+            </div>
+        <?php endif; ?>
 
-            $conn->close();
-            $stmt->close();
-        }
-        ?>
         <form action="signup.php" method="post">
             <div class="form-group">
                 <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username ?? ''); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
             </div>
 
             <div class="form-group">
@@ -95,6 +118,7 @@
 
             <button type="submit" class="signup-btn">Sign Up</button>
         </form>
+
         <p>Already have an account? <a href="../LogIn/index.php">Log In</a></p>
     </div>
 </body>

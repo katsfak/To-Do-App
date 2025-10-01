@@ -1,12 +1,11 @@
-/* Reset some default styles */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
 }
 
-/* Body styles */
+/* Body */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
@@ -17,7 +16,7 @@ body {
     color: #333;
 }
 
-/* Signup container styles */
+/* Signup container */
 .signup-container {
     background-color: #fff;
     padding: 2.5rem 2rem;
@@ -34,7 +33,7 @@ body {
     font-weight: 600;
 }
 
-/* Form group styles */
+/* Form groups */
 .form-group {
     margin-bottom: 1.2rem;
 }
@@ -60,7 +59,7 @@ body {
     outline: none;
 }
 
-/* Submit button styles */
+/* Button */
 .signup-btn {
     width: 100%;
     padding: 0.8rem;
@@ -78,7 +77,7 @@ body {
     background: linear-gradient(90deg, #ACB6E5 0%, #74ebd5 100%);
 }
 
-/* Link styles */
+/* Links */
 .signup-container p {
     text-align: center;
     margin-top: 1.5rem;
@@ -93,4 +92,34 @@ body {
 
 .signup-container p a:hover {
     color: #34495e;
+}
+
+/* Alerts */
+.alert {
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.alert-danger {
+    background-color: #ff4d4f;
+    color: #fff;
+    border: 1px solid #e60000;
+    font-weight: bold;
+}
+
+.success {
+    background-color: #28a745;
+    color: #fff;
+    border: 1px solid #1e7e34;
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
