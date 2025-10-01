@@ -1,56 +1,50 @@
 <?php
-$errors = [];
+echo "REQUEST_METHOD: " . $_SERVER['REQUEST_METHOD'] . "<br>";
+echo "<pre>POST: " . print_r($_POST, true) . "</pre>";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
 
-    if (empty($username) || empty($password)) {
-        $errors[] = "All fields are required.";
-    }
-    if (strlen($password) < 6) {
-        $errors[] = "Password must be at least 6 characters long.";
+    if (empty($_POST['username']) || empty($_POST['password'])) {
+        echo "Error: Both username and password are required.<br>";
     } else {
-        if (empty($errors)) {
-            require_once '../config.php';
 
-            if ($conn) {
-                $stmt = $conn->prepare("SELECT id, fullname, password FROM users WHERE username = ?");
-                $stmt->bind_param("s", $username);
-                $stmt->execute();
-                $stmt->store_result();
+        require_once '../config.php';
+        echo "Database connection established.<br>";
+        echo "Password: " . htmlspecialchars($_POST['password']) . "<br>";
+        $sql = "SELECT * FROM users WHERE username = '" . $_POST['username'] . "'";
+        $result = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($result);
+        if($num == 1){
+            while($row = mysqli_fetch_assoc($result)){
+                $id = $row['id'];
+                $fullname = $row['fullname'];
+                $hashed_password = $row['password'];
+                echo "Fetched user data. password: " . htmlspecialchars($hashed_password) . "<br>";
+                echo "Password: " . htmlspecialchars($_POST['password']) . "<br>";
 
-                if ($stmt->num_rows > 0) {
-                    $stmt->bind_result($id, $fullname, $hashed_password);
-                    $stmt->fetch();
-
-                    if (password_verify($password, $hashed_password) === true) {
-                        print "<pre>D: $id, Pas: $password, Hashed Password: $hashed_password</pre>";
-                        // session_start();
-                        // $_SESSION['user_id'] = $id;
-                        // $_SESSION['username'] = $username;
-                        // $_SESSION['fullname'] = $fullname;
-                        // $_SESSION['tasks'] = $_SESSION['tasks'] ?? [];
-                        // header("Location: ../Home/home.php");
-                        // exit();
-                    } else {
-                        $errors[] = "Invalid username or password.";
-                        print "<pre>Password verification failed</pre>";
-                    }
+                if (password_verify($_POST['password'], $hashed_password)) {
+                    echo "Password verified successfully.<br>";
+                    $login_success = true;
+                    session_start();
+                    $_SESSION['user_id'] = $id;
+                    $_SESSION['username'] = $_POST['username'];
+                    $_SESSION['fullname'] = $fullname;
+                    header("Location: ../Home/home.php");
+                    // session_start();
+                    // $_SESSION['user_id'] = $id;
+                    // $_SESSION['username'] = $_POST['username'];
+                    // $_SESSION['fullname'] = $fullname;
+                    // $_SESSION['tasks'] = $_SESSION['tasks'] ?? [];
+                    // header("Location: ../Home/home.php");
+                    // exit();
                 } else {
-                    $errors[] = "Invalid username or password.";
-                    print "<pre>User not found</pre>";
+                    echo "Error: Incorrect password.<br>";
                 }
-            } else {
-                $errors[] = "Database connection failed. Please try again later.";
-                print "<pre>Database connection failed</pre>";
             }
-            $stmt->close();
-            $conn->close();
         } else {
-            $errors[] = "Database connection failed. Please try again later.";
-            print "<pre>Errors: " . print_r($errors, true) . "</pre>";
+            echo "Error: Username not found.<br>";
         }
+            
     }
 }
 
@@ -61,38 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login</title>
 </head>
 
 <body>
-    <div class="login-container">
-        <h2>Log In</h2>
-
-        <?php if (!empty($errors)): ?>
-            <div class="alert alert-error animate-shake">
-                <?php foreach ($errors as $error): ?>
-                    <p><?php echo htmlspecialchars($error); ?></p>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-
-        <form action="index.php" method="post">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username ?? ''); ?>" required>
-
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <button type="submit" class="login-btn">Log In</button>
-        </form>
-        <p>Don't have an account? <a href="../Register/signup.php">Sign Up</a></p>
-    </div>
+    <form action="index.php" method="post">
+        <label>Username: <input type="text" name="username"></label><br>
+        <label>Password: <input type="password" name="password"></label><br>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 
 </html>
