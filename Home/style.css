@@ -1,11 +1,17 @@
-/* Basic CSS for Home page */
-
-body {
+/* Reset some default styles */
+* {
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f6fa;
-    color: #222;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    min-height: 100vh;
+    color: #333;
+    padding: 2rem 1rem;
 }
 
 header {
@@ -56,6 +62,48 @@ a:hover {
 
 .button:hover {
     background: #3867d6;
+}
+
+/* Navigation button styles */
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-btn {
+    background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    text-decoration: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.profile-btn:hover {
+    background: linear-gradient(90deg, #2980b9 0%, #3498db 100%);
+    transform: translateY(-1px);
+}
+
+.logout-btn {
+    background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(90deg, #c0392b 0%, #e74c3c 100%);
+    transform: translateY(-1px);
 }
 
 footer {

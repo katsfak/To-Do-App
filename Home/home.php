@@ -34,9 +34,12 @@
         <h1>To Do List</h1>
         <div class="user-info">
             <span class="welcome-text">Welcome, <?php echo htmlspecialchars($_SESSION['fullname'] ?? 'User'); ?>!</span>
-            <form method="post" style="display: inline;">
-                <button type="submit" name="logout" class="logout-btn">Logout</button>
-            </form>
+            <div class="nav-buttons">
+                <a href="../Profile/profile.php" class="profile-btn">Profile Settings</a>
+                <form method="post" style="display: inline;">
+                    <button type="submit" name="logout" class="logout-btn">Logout</button>
+                </form>
+            </div>
         </div>
     </div>
     <?php
