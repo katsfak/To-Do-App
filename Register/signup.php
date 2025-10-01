@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->num_rows > 0) {
                 $errors[] = "Username or email already taken.";
             } else {
-                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $created_at = date("Y-m-d H:i:s");
 
                 $stmt = $conn->prepare("INSERT INTO users (fullname, username, email, password, created_at) VALUES (?, ?, ?, ?, ?)");
@@ -81,15 +81,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p><?php echo htmlspecialchars($error); ?></p>
                 <?php endforeach; ?>
             </div>
-        <?php endif; ?>
-
-        <!-- Εμφάνιση Success -->
+        <?php endif; ?><!-- Εμφάνιση Success -->
         <?php if (!empty($success)): ?>
             <div class="alert success">
                 <p><?php echo $success; ?></p>
             </div>
         <?php endif; ?>
-
         <form action="signup.php" method="post">
             <div class="form-group">
                 <label for="name">Full Name:</label>

@@ -10,49 +10,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (strlen($password) < 6) {
         $errors[] = "Password must be at least 6 characters long.";
-    }
-    if (empty($errors)) {
-        require_once '../config.php';
+    } else {
+        if (empty($errors)) {
+            require_once '../config.php';
 
-        if ($conn) {
-            $stmt = $conn->prepare("SELECT id, fullname, username, email, password FROM users WHERE username = ?");
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $stmt->store_result();
-            echo "i am here";
+            if ($conn) {
+                $stmt = $conn->prepare("SELECT id, fullname, password FROM users WHERE username = ?");
+                $stmt->bind_param("s", $username);
+                $stmt->execute();
+                $stmt->store_result();
 
-            if ($stmt->num_rows > 0) {
-                $stmt->bind_result($user_id, $fullname, $db_username, $email, $hashed_password);
-                $stmt->fetch();
-                echo $hashed_password;
-                echo $password;
-                print "i am here1";
+                if ($stmt->num_rows > 0) {
+                    $stmt->bind_result($id, $fullname, $hashed_password);
+                    $stmt->fetch();
 
-                if (password_verify($password, $hashed_password) == true) {
-                    session_start();
-
-                    $_SESSION['username'] = $db_username;
-                    $_SESSION['fullname'] = $fullname;
-                    $_SESSION['email'] = $email;
-                    print "i am here2";
-                    header("Location: ../Home/home.php");
-                    exit();
+                    if (password_verify($password, $hashed_password) === true) {
+                        print "<pre>D: $id, Pas: $password, Hashed Password: $hashed_password</pre>";
+                        // session_start();
+                        // $_SESSION['user_id'] = $id;
+                        // $_SESSION['username'] = $username;
+                        // $_SESSION['fullname'] = $fullname;
+                        // $_SESSION['tasks'] = $_SESSION['tasks'] ?? [];
+                        // header("Location: ../Home/home.php");
+                        // exit();
+                    } else {
+                        $errors[] = "Invalid username or password.";
+                        print "<pre>Password verification failed</pre>";
+                    }
                 } else {
                     $errors[] = "Invalid username or password.";
-                    print "i am here3";
+                    print "<pre>User not found</pre>";
                 }
             } else {
-                $errors[] = "Invalid username or password.";
-                print "i am here4";
+                $errors[] = "Database connection failed. Please try again later.";
+                print "<pre>Database connection failed</pre>";
             }
-
             $stmt->close();
+            $conn->close();
         } else {
-            $errors[] = "Database error occurred. Please try again later.";
+            $errors[] = "Database connection failed. Please try again later.";
+            print "<pre>Errors: " . print_r($errors, true) . "</pre>";
         }
-        $conn->close();
-    } else {
-        $errors[] = "Database connection failed. Please try again later.";
     }
 }
 
