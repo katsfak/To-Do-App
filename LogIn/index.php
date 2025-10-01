@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         require_once '../config.php';
 
         if ($conn) {
-            $stmt = $conn->prepare("SELECT user_id, fullname, username, email, password FROM users WHERE username = ?");
+            $stmt = $conn->prepare("SELECT id, fullname, username, email, password FROM users WHERE username = ?");
             if ($stmt) {
                 $stmt->bind_param("s", $username);
                 $stmt->execute();
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (password_verify($password, $hashed_password)) {
                         session_regenerate_id(true);
-                        $_SESSION['user_id'] = $user_id;
+                        $_SESSION['id'] = $user_id;
                         $_SESSION['username'] = $db_username;
                         $_SESSION['fullname'] = $fullname;
                         $_SESSION['email'] = $email;
