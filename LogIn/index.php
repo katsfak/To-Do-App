@@ -30,13 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['username'] = $_POST['username'];
                     $_SESSION['fullname'] = $fullname;
                     header("Location: ../Home/home.php");
-                    // session_start();
-                    // $_SESSION['user_id'] = $id;
-                    // $_SESSION['username'] = $_POST['username'];
-                    // $_SESSION['fullname'] = $fullname;
-                    // $_SESSION['tasks'] = $_SESSION['tasks'] ?? [];
-                    // header("Location: ../Home/home.php");
-                    // exit();
+                    exit();
                 } else {
                     echo "Error: Incorrect password.<br>";
                 }
