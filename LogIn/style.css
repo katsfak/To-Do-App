@@ -1,36 +1,84 @@
-/* Reset */
-* {
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
-/* Body styles */
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    color: #333;
-}
-
-/* Login container */
-.login-container {
-    background-color: #fff;
-    padding: 2.5rem 2rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
-    width: 100%;
-    max-width: 350px;
-}
-
-.login-container h2 {
+.header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
     text-align: center;
-    margin-bottom: 1.5rem;
-    color: #34495e;
-    font-weight: 600;
+}
+
+.user-info {
+    background: white;
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.user-info form {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.user-info input {
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.user-info button {
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.user-info button:hover {
+    background-color: #45a049;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+.error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+.success-msg {
+    color: green;
+    font-weight: bold;
+}
+
+.user-info p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.user-info a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.user-info a:hover {
+    text-decoration: underline;
 }
 
 /* Form */

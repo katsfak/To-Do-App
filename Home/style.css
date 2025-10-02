@@ -1,117 +1,146 @@
-/* Reset some default styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styles */
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
     min-height: 100vh;
     color: #333;
-    padding: 2rem 1rem;
 }
 
-header {
-    background: #2d98da;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-    font-size: 2rem;
-    letter-spacing: 2px;
-}
-
-main {
-    max-width: 900px;
-    margin: 40px auto;
+.header {
+    background-color: #4CAF50;
+    color: white;
     padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-h1, h2, h3 {
-    color: #2d98da;
-    margin-top: 0;
+.header h1 {
+    margin: 0;
 }
 
-a {
-    color: #3867d6;
+.user-info a {
+    color: white;
     text-decoration: none;
-    transition: color 0.2s;
+    margin-left: 15px;
 }
 
-a:hover {
-    color: #2d98da;
+.user-info a:hover {
     text-decoration: underline;
 }
 
-.button {
-    display: inline-block;
-    padding: 10px 24px;
-    background: #2d98da;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-.button:hover {
-    background: #3867d6;
+.todo-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
-/* Navigation button styles */
-.nav-buttons {
+.todo-section form {
     display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.todo-section input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.todo-section button[name="add_task"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.todo-section button[name="add_task"]:hover {
+    background-color: #45a049;
+}
+
+.tasks-list {
+    margin-top: 20px;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border-left: 4px solid #4CAF50;
 }
 
-.profile-btn {
-    background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+.task-item.completed {
+    opacity: 0.6;
+    border-left-color: #ccc;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+}
+
+.task-text {
+    flex: 1;
+    font-size: 16px;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.toggle-btn {
+    padding: 5px 10px;
+    background-color: #2196F3;
     color: white;
-    text-decoration: none;
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: 3px;
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s;
-    font-size: 0.9rem;
+    font-size: 14px;
 }
 
-.profile-btn:hover {
-    background: linear-gradient(90deg, #2980b9 0%, #3498db 100%);
-    transform: translateY(-1px);
+.toggle-btn:hover {
+    background-color: #1976D2;
 }
 
-.logout-btn {
-    background: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+.delete-btn {
+    padding: 5px 10px;
+    background-color: #f44336;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: 3px;
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s;
-    font-size: 0.9rem;
+    font-size: 14px;
 }
 
-.logout-btn:hover {
-    background: linear-gradient(90deg, #c0392b 0%, #e74c3c 100%);
-    transform: translateY(-1px);
+.delete-btn:hover {
+    background-color: #d32f2f;
 }
 
-footer {
+.no-tasks {
     text-align: center;
-    padding: 16px 0;
-    background: #f1f2f6;
-    color: #888;
-    font-size: 1rem;
-    margin-top: 40px;
-    border-top: 1px solid #e1e1e1;
+    color: #666;
+    font-style: italic;
+    padding: 40px;
 }
