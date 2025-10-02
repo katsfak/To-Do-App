@@ -1,6 +1,7 @@
 <?php
 session_start();
 $name = $_SESSION['fullname'] ?? 'Guest';
+$id = $_SESSION['user_id'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
