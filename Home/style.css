@@ -1,21 +1,14 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
     background: #f4f6f8;
-    min-height: 100vh;
-    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
 .header {
     background-color: #4CAF50;
     color: white;
     padding: 20px;
-    text-align: center;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,45 +18,45 @@ body {
     margin: 0;
 }
 
-.user-info a {
+.header .user-info a {
     color: white;
     text-decoration: none;
     margin-left: 15px;
 }
 
-.user-info a:hover {
+.header .user-info a:hover {
     text-decoration: underline;
 }
 
-.container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-.todo-section {
+.user-info {
     background: white;
+    max-width: 500px;
+    margin: 40px auto;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
-.todo-section form {
+.user-info form {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
+    flex-direction: column;
 }
 
-.todo-section input[type="text"] {
-    flex: 1;
+.user-info label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.user-info input {
     padding: 10px;
-    border: 1px solid #ccc;
+    margin-top: 5px;
     border-radius: 5px;
-    font-size: 16px;
+    border: 1px solid #ccc;
 }
 
-.todo-section button[name="add_task"] {
-    padding: 10px 20px;
+.user-info button {
+    margin-top: 20px;
+    padding: 12px;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -72,12 +65,101 @@ body {
     cursor: pointer;
 }
 
-.todo-section button[name="add_task"]:hover {
+.user-info button:hover {
     background-color: #45a049;
 }
 
-.tasks-list {
-    margin-top: 20px;
+hr {
+    margin: 20px 0;
+}
+
+.error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+.success-msg {
+    color: green;
+    font-weight: bold;
+}
+
+/* Additional styles for project functionality */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.project {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #4CAF50;
+}
+
+.project-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.project-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.project form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.project input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.project button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.project button:hover {
+    background-color: #45a049;
+}
+
+.project button.delete-btn {
+    background-color: #f44336;
+}
+
+.project button.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.project button.edit-btn {
+    background-color: #2196F3;
+}
+
+.project button.edit-btn:hover {
+    background-color: #1976D2;
 }
 
 .task-item {
@@ -110,37 +192,20 @@ body {
     gap: 10px;
 }
 
-.toggle-btn {
+.task-actions button {
     padding: 5px 10px;
-    background-color: #2196F3;
-    color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
 }
 
-.toggle-btn:hover {
-    background-color: #1976D2;
-}
-
-.delete-btn {
-    padding: 5px 10px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.delete-btn:hover {
-    background-color: #d32f2f;
-}
-
-.no-tasks {
+.no-projects {
     text-align: center;
     color: #666;
     font-style: italic;
     padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
