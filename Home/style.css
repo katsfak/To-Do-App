@@ -29,13 +29,14 @@ body {
 }
 
 .user-info {
-    background: white;
+    background: #4CAF50;
     max-width: 500px;
-    margin: 40px auto;
+    margin: 40px 0 40px auto; /* top 40px, right auto, bottom 40px, left auto */
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
+
 
 .user-info form {
     display: flex;
@@ -66,6 +67,47 @@ body {
 }
 
 .user-info button:hover {
+    background-color: #45a049;
+}
+
+.userinfo {
+    background: #4CAF50;;
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.userinfo form {
+    display: flex;
+    flex-direction: column;
+}
+
+.userinfo label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.userinfo input {
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.userinfo button {
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.userinfo button:hover {
     background-color: #45a049;
 }
 

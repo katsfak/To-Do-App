@@ -84,7 +84,7 @@ if (isset($_POST['edit_task']) && !empty($_POST['edited_task'])) {
     </div>
 
     <div class="container">
-        <div class="user-info">
+        <div class="userinfo">
             <h2>Add New Project</h2>
             <form method="POST">
                 <label for="project_name">Project Name:</label>
