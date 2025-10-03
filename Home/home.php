@@ -2,12 +2,13 @@
 session_start();
 require '../config.php';
 
-// Έλεγχος login
+// Check login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
+// Fetch user info
 $name = $_SESSION['fullname'] ?? 'Guest';
 $user_id = $_SESSION['user_id'];
 
@@ -53,7 +54,7 @@ if (isset($_POST['delete_task'])) {
     $stmt->execute();
 }
 
-// TOGGLE TASK (ολοκληρωμένο/μη ολοκληρωμένο)
+// TOGGLE TASK (completed/not completed)
 if (isset($_POST['toggle_task'])) {
     $task_id = (int)$_POST['task_id'];
     $stmt = $conn->prepare("UPDATE tasks SET completed = NOT completed WHERE id=?");
@@ -83,6 +84,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
 </head>
 
 <body>
+    <!-- Header -->
     <div class="header">
         <h1>Welcome, <?php echo htmlspecialchars($name); ?></h1>
         <div class="user-info">
@@ -91,6 +93,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
         </div>
     </div>
 
+    <!-- Main Container -->
     <div class="container">
         <div class="userinfo">
             <h2>Add New Project</h2>
@@ -101,6 +104,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
             </form>
         </div>
 
+        <!-- Projects List -->
         <?php if ($projects->num_rows == 0): ?>
             <div class="no-projects">
                 <p>No projects yet. Create your first project above!</p>
@@ -111,6 +115,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
                 $project_id = $project['id'];
                 $tasks = $conn->query("SELECT * FROM tasks WHERE project_id=$project_id ORDER BY id DESC");
                 ?>
+                <!-- Project Block -->
                 <div class="project">
                     <div class="project-header">
                         <h3 class="project-name"><?php echo htmlspecialchars($project['name']); ?></h3>
@@ -128,14 +133,14 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
                             </form>
                         </div>
                     </div>
-
+                    <!-- Tasks List -->
                     <h4>Add Task</h4>
                     <form method="POST">
                         <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
                         <input type="text" name="task" placeholder="Enter task description" required>
                         <button type="submit" name="add_task">Add Task</button>
                     </form>
-
+                    <!-- Tasks Display -->
                     <?php if ($tasks->num_rows == 0): ?>
                         <p>No tasks yet.</p>
                     <?php else: ?>
