@@ -1,75 +1,83 @@
 <?php
 session_start();
+require '../config.php';
+
+// Έλεγχος login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 $name = $_SESSION['fullname'] ?? 'Guest';
-$id = $_SESSION['user_id'] ?? null;
+$user_id = $_SESSION['user_id'];
 
-// Initialize projects if not exists
-if (!isset($_SESSION['projects'])) {
-    $_SESSION['projects'] = [];
-}
-
-// HANDLE ADD PROJECT
+// ADD PROJECT
 if (isset($_POST['add_project']) && !empty($_POST['project_name'])) {
-    $project_name = htmlspecialchars(trim($_POST['project_name']));
-    $project_id = uniqid();
-    $_SESSION['projects'][$project_id] = [
-        'name' => $project_name,
-        'tasks' => []
-    ];
+    $project_name = trim($_POST['project_name']);
+    $stmt = $conn->prepare("INSERT INTO projects (user_id, name) VALUES (?, ?)");
+    $stmt->bind_param("is", $user_id, $project_name);
+    $stmt->execute();
 }
 
-// HANDLE DELETE PROJECT
+// DELETE PROJECT
 if (isset($_POST['delete_project'])) {
-    $project_id = $_POST['project_id'];
-    unset($_SESSION['projects'][$project_id]);
+    $project_id = (int)$_POST['project_id'];
+    $stmt = $conn->prepare("DELETE FROM projects WHERE id=? AND user_id=?");
+    $stmt->bind_param("ii", $project_id, $user_id);
+    $stmt->execute();
 }
 
-// HANDLE EDIT PROJECT
+// EDIT PROJECT
 if (isset($_POST['edit_project']) && !empty($_POST['edited_project'])) {
-    $project_id = $_POST['project_id'];
-    $_SESSION['projects'][$project_id]['name'] = htmlspecialchars(trim($_POST['edited_project']));
+    $project_id = (int)$_POST['project_id'];
+    $newname = trim($_POST['edited_project']);
+    $stmt = $conn->prepare("UPDATE projects SET name=? WHERE id=? AND user_id=?");
+    $stmt->bind_param("sii", $newname, $project_id, $user_id);
+    $stmt->execute();
 }
 
-// HANDLE ADD TASK
+// ADD TASK
 if (isset($_POST['add_task']) && !empty($_POST['task']) && isset($_POST['project_id'])) {
-    $task = htmlspecialchars(trim($_POST['task']));
-    $task_id = uniqid();
-    $project_id = $_POST['project_id'];
-    $_SESSION['projects'][$project_id]['tasks'][$task_id] = [
-        'task' => $task,
-        'completed' => false,
-        'created' => date('Y-m-d H:i:s')
-    ];
+    $task = trim($_POST['task']);
+    $project_id = (int)$_POST['project_id'];
+    $stmt = $conn->prepare("INSERT INTO tasks (project_id, title) VALUES (?, ?)");
+    $stmt->bind_param("is", $project_id, $task);
+    $stmt->execute();
 }
 
-// HANDLE DELETE TASK
+// DELETE TASK
 if (isset($_POST['delete_task'])) {
-    $project_id = $_POST['project_id'];
-    $task_id = $_POST['task_id'];
-    unset($_SESSION['projects'][$project_id]['tasks'][$task_id]);
+    $task_id = (int)$_POST['task_id'];
+    $stmt = $conn->prepare("DELETE FROM tasks WHERE id=?");
+    $stmt->bind_param("i", $task_id);
+    $stmt->execute();
 }
 
-// HANDLE TOGGLE TASK
+// TOGGLE TASK (ολοκληρωμένο/μη ολοκληρωμένο)
 if (isset($_POST['toggle_task'])) {
-    $project_id = $_POST['project_id'];
-    $task_id = $_POST['task_id'];
-    $_SESSION['projects'][$project_id]['tasks'][$task_id]['completed'] =
-        !$_SESSION['projects'][$project_id]['tasks'][$task_id]['completed'];
+    $task_id = (int)$_POST['task_id'];
+    $stmt = $conn->prepare("UPDATE tasks SET completed = NOT completed WHERE id=?");
+    $stmt->bind_param("i", $task_id);
+    $stmt->execute();
 }
 
-// HANDLE EDIT TASK
+// EDIT TASK
 if (isset($_POST['edit_task']) && !empty($_POST['edited_task'])) {
-    $project_id = $_POST['project_id'];
-    $task_id = $_POST['task_id'];
-    $_SESSION['projects'][$project_id]['tasks'][$task_id]['task'] = htmlspecialchars(trim($_POST['edited_task']));
+    $task_id = (int)$_POST['task_id'];
+    $newtask = trim($_POST['edited_task']);
+    $stmt = $conn->prepare("UPDATE tasks SET title=? WHERE id=?");
+    $stmt->bind_param("si", $newtask, $task_id);
+    $stmt->execute();
 }
+
+// GET PROJECTS
+$projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY id DESC");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects & Tasks</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -88,17 +96,21 @@ if (isset($_POST['edit_task']) && !empty($_POST['edited_task'])) {
             <h2>Add New Project</h2>
             <form method="POST">
                 <label for="project_name">Project Name:</label>
-                <input type="text" id="project_name" name="project_name" placeholder="Enter project name" required>
+                <input type="text" id="project_name" name="project_name" required>
                 <button type="submit" name="add_project">Add Project</button>
             </form>
         </div>
 
-        <?php if (empty($_SESSION['projects'])): ?>
+        <?php if ($projects->num_rows == 0): ?>
             <div class="no-projects">
                 <p>No projects yet. Create your first project above!</p>
             </div>
         <?php else: ?>
-            <?php foreach ($_SESSION['projects'] as $project_id => $project): ?>
+            <?php while ($project = $projects->fetch_assoc()): ?>
+                <?php
+                $project_id = $project['id'];
+                $tasks = $conn->query("SELECT * FROM tasks WHERE project_id=$project_id ORDER BY id DESC");
+                ?>
                 <div class="project">
                     <div class="project-header">
                         <h3 class="project-name"><?php echo htmlspecialchars($project['name']); ?></h3>
@@ -120,43 +132,41 @@ if (isset($_POST['edit_task']) && !empty($_POST['edited_task'])) {
                     <h4>Add Task</h4>
                     <form method="POST">
                         <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
-                        <label for="task_<?php echo $project_id; ?>">Task Description:</label>
-                        <input type="text" id="task_<?php echo $project_id; ?>" name="task" placeholder="Enter task description" required>
+                        <input type="text" name="task" placeholder="Enter task description" required>
                         <button type="submit" name="add_task">Add Task</button>
                     </form>
 
-                    <?php if (empty($project['tasks'])): ?>
+                    <?php if ($tasks->num_rows == 0): ?>
                         <p>No tasks yet.</p>
                     <?php else: ?>
-                        <?php foreach ($project['tasks'] as $task_id => $task): ?>
+                        <?php while ($task = $tasks->fetch_assoc()): ?>
                             <div class="task-item <?php echo $task['completed'] ? 'completed' : ''; ?>">
-                                <span class="task-text"><?php echo htmlspecialchars($task['task']); ?></span>
+                                <span class="task-text"><?php echo htmlspecialchars($task['title']); ?></span>
                                 <div class="task-actions">
                                     <!-- Toggle -->
                                     <form method="POST" style="display:inline;">
-                                        <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
-                                        <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
-                                        <button type="submit" name="toggle_task" class="edit-btn"><?php echo $task['completed'] ? 'Undo' : 'Complete'; ?></button>
+                                        <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                        <button type="submit" name="toggle_task" class="edit-btn">
+                                            <?php echo $task['completed'] ? 'Undo' : 'Complete'; ?>
+                                        </button>
                                     </form>
                                     <!-- Edit -->
                                     <form method="POST" style="display:inline;">
-                                        <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
-                                        <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
+                                        <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                         <input type="text" name="edited_task" placeholder="New task description" required>
                                         <button type="submit" name="edit_task" class="edit-btn">Save</button>
                                     </form>
                                     <!-- Delete -->
                                     <form method="POST" style="display:inline;">
-                                        <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
-                                        <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
+                                        <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                         <button type="submit" name="delete_task" class="delete-btn" onclick="return confirm('Delete this task?')">Delete</button>
                                     </form>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        <?php endwhile; ?>
                     <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
+            <?php endwhile; ?>
         <?php endif; ?>
     </div>
 </body>
