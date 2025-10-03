@@ -2,18 +2,19 @@
 session_start();
 require '../config.php';
 
-// Check login
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-// Fetch user info
+// Get user info from session
 $name = $_SESSION['fullname'] ?? 'Guest';
 $user_id = $_SESSION['user_id'];
 
 // ADD PROJECT
 if (isset($_POST['add_project']) && !empty($_POST['project_name'])) {
+    // Add new project for user
     $project_name = trim($_POST['project_name']);
     $stmt = $conn->prepare("INSERT INTO projects (user_id, name) VALUES (?, ?)");
     $stmt->bind_param("is", $user_id, $project_name);
@@ -22,6 +23,7 @@ if (isset($_POST['add_project']) && !empty($_POST['project_name'])) {
 
 // DELETE PROJECT
 if (isset($_POST['delete_project'])) {
+    // Delete project (and its tasks) for user
     $project_id = (int)$_POST['project_id'];
     $stmt = $conn->prepare("DELETE FROM projects WHERE id=? AND user_id=?");
     $stmt->bind_param("ii", $project_id, $user_id);
@@ -30,6 +32,7 @@ if (isset($_POST['delete_project'])) {
 
 // EDIT PROJECT
 if (isset($_POST['edit_project']) && !empty($_POST['edited_project'])) {
+    // Edit project name
     $project_id = (int)$_POST['project_id'];
     $newname = trim($_POST['edited_project']);
     $stmt = $conn->prepare("UPDATE projects SET name=? WHERE id=? AND user_id=?");
@@ -39,6 +42,7 @@ if (isset($_POST['edit_project']) && !empty($_POST['edited_project'])) {
 
 // ADD TASK
 if (isset($_POST['add_task']) && !empty($_POST['task']) && isset($_POST['project_id'])) {
+    // Add new task to project
     $task = trim($_POST['task']);
     $project_id = (int)$_POST['project_id'];
     $stmt = $conn->prepare("INSERT INTO tasks (project_id, title) VALUES (?, ?)");
@@ -48,6 +52,7 @@ if (isset($_POST['add_task']) && !empty($_POST['task']) && isset($_POST['project
 
 // DELETE TASK
 if (isset($_POST['delete_task'])) {
+    // Delete task by id
     $task_id = (int)$_POST['task_id'];
     $stmt = $conn->prepare("DELETE FROM tasks WHERE id=?");
     $stmt->bind_param("i", $task_id);
@@ -56,6 +61,7 @@ if (isset($_POST['delete_task'])) {
 
 // TOGGLE TASK (completed/not completed)
 if (isset($_POST['toggle_task'])) {
+    // Toggle completed status of task
     $task_id = (int)$_POST['task_id'];
     $stmt = $conn->prepare("UPDATE tasks SET completed = NOT completed WHERE id=?");
     $stmt->bind_param("i", $task_id);
@@ -64,6 +70,7 @@ if (isset($_POST['toggle_task'])) {
 
 // EDIT TASK
 if (isset($_POST['edit_task']) && !empty($_POST['edited_task'])) {
+    // Edit task title
     $task_id = (int)$_POST['task_id'];
     $newtask = trim($_POST['edited_task']);
     $stmt = $conn->prepare("UPDATE tasks SET title=? WHERE id=?");
@@ -97,6 +104,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
     <div class="container">
         <div class="userinfo">
             <h2>Add New Project</h2>
+            <!-- Form to add new project -->
             <form method="POST">
                 <label for="project_name">Project Name:</label>
                 <input type="text" id="project_name" name="project_name" required>
@@ -112,6 +120,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
         <?php else: ?>
             <?php while ($project = $projects->fetch_assoc()): ?>
                 <?php
+                // Get tasks for this project
                 $project_id = $project['id'];
                 $tasks = $conn->query("SELECT * FROM tasks WHERE project_id=$project_id ORDER BY id DESC");
                 ?>
@@ -133,7 +142,7 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
                             </form>
                         </div>
                     </div>
-                    <!-- Tasks List -->
+                    <!-- Add Task Form -->
                     <h4>Add Task</h4>
                     <form method="POST">
                         <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
@@ -148,20 +157,20 @@ $projects = $conn->query("SELECT * FROM projects WHERE user_id=$user_id ORDER BY
                             <div class="task-item <?php echo $task['completed'] ? 'completed' : ''; ?>">
                                 <span class="task-text"><?php echo htmlspecialchars($task['title']); ?></span>
                                 <div class="task-actions">
-                                    <!-- Toggle -->
+                                    <!-- Toggle Completed -->
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                         <button type="submit" name="toggle_task" class="edit-btn">
                                             <?php echo $task['completed'] ? 'Undo' : 'Complete'; ?>
                                         </button>
                                     </form>
-                                    <!-- Edit -->
+                                    <!-- Edit Task -->
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                         <input type="text" name="edited_task" placeholder="New task description" required>
                                         <button type="submit" name="edit_task" class="edit-btn">Save</button>
                                     </form>
-                                    <!-- Delete -->
+                                    <!-- Delete Task -->
                                     <form method="POST" style="display:inline;">
                                         <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
                                         <button type="submit" name="delete_task" class="delete-btn" onclick="return confirm('Delete this task?')">Delete</button>

@@ -1,15 +1,15 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    font-family: Arial, sans-serif; /* Set font */
+    background: #f4f6f8; /* Page background */
     margin: 0;
     padding: 0;
 }
 
 /* Header Styles */
 .header {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #4CAF50; /* Header background */
+    color: white; /* Header text color */
     padding: 20px;
     display: flex;
     justify-content: space-between;
@@ -21,29 +21,28 @@ body {
 }
 
 .header .user-info a {
-    color: white;
+    color: white; /* User info link color */
     text-decoration: none;
     margin-left: 15px;
 }
 
 .header .user-info a:hover {
-    text-decoration: underline;
+    text-decoration: underline; /* Link hover effect */
 }
 
 /* User Info and Project Styles */
 .user-info {
-    background: #4CAF50;
+    background: #4CAF50; /* User info background */
     max-width: 500px;
-    margin: 40px 0 40px auto; /* top 40px, right auto, bottom 40px, left auto */
+    margin: 40px 0 40px auto; /* Position user info */
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Subtle shadow */
 }
-
 
 .user-info form {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stack form fields */
 }
 
 .user-info label {
@@ -70,12 +69,12 @@ body {
 }
 
 .user-info button:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* Button hover effect */
 }
 
 /* Project and Task Styles */
 .userinfo {
-    background: #4CAF50;;
+    background: #4CAF50; /* Project info background */
     max-width: 500px;
     margin: 40px auto;
     padding: 30px;
@@ -115,11 +114,12 @@ body {
     background-color: #45a049;
 }
 
-/* Project and Task Styles */
+/* Divider Style */
 hr {
     margin: 20px 0;
 }
 
+/* Message Styles */
 .error-msg {
     color: red;
     font-weight: bold;
@@ -130,13 +130,14 @@ hr {
     font-weight: bold;
 }
 
-/* Additional styles for project functionality */
+/* Container for Projects */
 .container {
     max-width: 800px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
+/* Individual Project Card */
 .project {
     background: white;
     border-radius: 10px;
@@ -145,6 +146,7 @@ hr {
     margin-bottom: 20px;
 }
 
+/* Project Header */
 .project-header {
     display: flex;
     justify-content: space-between;
@@ -154,17 +156,20 @@ hr {
     border-bottom: 2px solid #4CAF50;
 }
 
+/* Project Name */
 .project-name {
     font-size: 24px;
     font-weight: bold;
     color: #4CAF50;
 }
 
+/* Project Actions (edit/delete) */
 .project-actions {
     display: flex;
     gap: 10px;
 }
 
+/* Project Form */
 .project form {
     display: flex;
     flex-direction: column;
@@ -179,6 +184,7 @@ hr {
     font-size: 16px;
 }
 
+/* Project Buttons */
 .project button {
     padding: 10px 15px;
     background-color: #4CAF50;
@@ -193,6 +199,7 @@ hr {
     background-color: #45a049;
 }
 
+/* Delete Button */
 .project button.delete-btn {
     background-color: #f44336;
 }
@@ -201,6 +208,7 @@ hr {
     background-color: #d32f2f;
 }
 
+/* Edit Button */
 .project button.edit-btn {
     background-color: #2196F3;
 }
@@ -209,6 +217,7 @@ hr {
     background-color: #1976D2;
 }
 
+/* Task Item Styles */
 .task-item {
     display: flex;
     justify-content: space-between;
@@ -220,6 +229,7 @@ hr {
     border-left: 4px solid #4CAF50;
 }
 
+/* Completed Task */
 .task-item.completed {
     opacity: 0.6;
     border-left-color: #ccc;
@@ -229,11 +239,13 @@ hr {
     text-decoration: line-through;
 }
 
+/* Task Text */
 .task-text {
     flex: 1;
     font-size: 16px;
 }
 
+/* Task Actions */
 .task-actions {
     display: flex;
     gap: 10px;
@@ -247,6 +259,7 @@ hr {
     font-size: 12px;
 }
 
+/* No Projects Message */
 .no-projects {
     text-align: center;
     color: #666;
