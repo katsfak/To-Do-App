@@ -1,3 +1,4 @@
+/* Set base font and background for the whole page */
 body {
     font-family: Arial, sans-serif;
     background: #f4f6f8;
@@ -5,6 +6,7 @@ body {
     padding: 0;
 }
 
+/* Style for the header section */
 .header {
     background-color: #4CAF50;
     color: white;
@@ -12,6 +14,7 @@ body {
     text-align: center;
 }
 
+/* Container for user info form */
 .user-info {
     background: white;
     max-width: 500px;
@@ -21,16 +24,19 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
+/* Layout for the form inside user-info */
 .user-info form {
     display: flex;
     flex-direction: column;
 }
 
+/* Style for form labels */
 .user-info label {
     margin-top: 10px;
     font-weight: bold;
 }
 
+/* Style for input fields */
 .user-info input {
     padding: 10px;
     margin-top: 5px;
@@ -38,6 +44,7 @@ body {
     border: 1px solid #ccc;
 }
 
+/* Style for submit button */
 .user-info button {
     margin-top: 20px;
     padding: 12px;
@@ -49,34 +56,41 @@ body {
     cursor: pointer;
 }
 
+/* Button hover effect */
 .user-info button:hover {
     background-color: #45a049;
 }
 
+/* Style for horizontal rule */
 hr {
     margin: 20px 0;
 }
 
+/* Error message styling */
 .error-msg {
     color: red;
     font-weight: bold;
 }
 
+/* Success message styling */
 .success-msg {
     color: green;
     font-weight: bold;
 }
 
+/* Paragraph styling inside user-info */
 .user-info p {
     text-align: center;
     margin-top: 10px;
 }
 
+/* Link styling inside user-info */
 .user-info a {
     color: #4CAF50;
     text-decoration: none;
 }
 
+/* Link hover effect */
 .user-info a:hover {
     text-decoration: underline;
 }
