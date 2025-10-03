@@ -1,3 +1,4 @@
+/* Base body styles */
 body {
     font-family: Arial, sans-serif;
     background: #f4f6f8;
@@ -5,6 +6,7 @@ body {
     padding: 0;
 }
 
+/* Header styles */
 .header {
     background-color: #4CAF50;
     color: white;
@@ -12,6 +14,7 @@ body {
     text-align: center;
 }
 
+/* User info container */
 .user-info {
     background: white;
     max-width: 500px;
@@ -21,16 +24,19 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
+/* User info form layout */
 .user-info form {
     display: flex;
     flex-direction: column;
 }
 
+/* User info labels */
 .user-info label {
     margin-top: 10px;
     font-weight: bold;
 }
 
+/* User info input fields */
 .user-info input {
     padding: 10px;
     margin-top: 5px;
@@ -38,6 +44,7 @@ body {
     border: 1px solid #ccc;
 }
 
+/* User info button styles */
 .user-info button {
     margin-top: 20px;
     padding: 12px;
@@ -49,43 +56,51 @@ body {
     cursor: pointer;
 }
 
+/* Button hover effect */
 .user-info button:hover {
     background-color: #45a049;
 }
 
+/* Horizontal rule spacing */
 hr {
     margin: 20px 0;
 }
 
+/* Error message styles */
 .error-msg {
     color: red;
     font-weight: bold;
 }
 
+/* Success message styles */
 .success-msg {
     color: green;
     font-weight: bold;
 }
 
+/* User info paragraph styles */
 .user-info p {
     text-align: center;
     margin-top: 10px;
 }
 
+/* User info links */
 .user-info a {
     color: #4CAF50;
     text-decoration: none;
 }
 
+/* User info link hover effect */
 .user-info a:hover {
     text-decoration: underline;
 }
 
-/* Form */
+/* Form group container */
 .form-group {
     margin-bottom: 1.2rem;
 }
 
+/* Form group label styles */
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
@@ -93,6 +108,7 @@ hr {
     font-size: 1rem;
 }
 
+/* Form group input styles */
 .form-group input {
     width: 100%;
     padding: 0.7rem;
@@ -102,13 +118,14 @@ hr {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* Input focus effect */
 .form-group input:focus {
     border-color: #74ebd5;
     outline: none;
     box-shadow: 0 0 5px rgba(116, 235, 213, 0.5);
 }
 
-/* Button */
+/* Login button styles */
 .login-btn {
     width: 100%;
     padding: 0.8rem;
@@ -122,24 +139,27 @@ hr {
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
+/* Login button hover effect */
 .login-btn:hover {
     background: linear-gradient(90deg, #ACB6E5 0%, #74ebd5 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(52, 73, 94, 0.2);
 }
 
+/* Login button active effect */
 .login-btn:active {
     transform: translateY(0);
     box-shadow: none;
 }
 
-/* Links */
+/* Login container paragraph styles */
 .login-container p {
     text-align: center;
     margin-top: 1.5rem;
     font-size: 0.95rem;
 }
 
+/* Login container link styles */
 .login-container p a {
     color: #74ebd5;
     text-decoration: none;
@@ -147,6 +167,7 @@ hr {
     position: relative;
 }
 
+/* Animated underline for links */
 .login-container p a::after {
     content: "";
     position: absolute;
@@ -160,12 +181,13 @@ hr {
     transform-origin: right;
 }
 
+/* Link underline hover animation */
 .login-container p a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
 }
 
-/* Alerts */
+/* Alert base styles */
 .alert {
     padding: 1rem;
     margin-bottom: 1rem;
@@ -174,6 +196,7 @@ hr {
     text-align: center;
 }
 
+/* Error alert styles */
 .alert-error {
     background-color: #ff4d4f;
     color: #fff;
@@ -181,6 +204,7 @@ hr {
     font-weight: bold;
 }
 
+/* Success alert styles */
 .alert-success {
     background-color: #28a745;
     color: #fff;
@@ -188,7 +212,7 @@ hr {
     font-weight: bold;
 }
 
-/* Shake animation */
+/* Shake animation keyframes */
 @keyframes shake {
     0% { transform: translateX(0); }
     20% { transform: translateX(-5px); }
@@ -198,11 +222,12 @@ hr {
     100% { transform: translateX(0); }
 }
 
+/* Shake animation class */
 .animate-shake {
     animation: shake 0.3s ease;
 }
 
-/* Responsive */
+/* Responsive styles for small screens */
 @media (max-width: 400px) {
     .login-container {
         padding: 2rem 1.5rem;
