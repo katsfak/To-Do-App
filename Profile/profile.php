@@ -1,15 +1,20 @@
 <?php
-session_start();
+session_start(); // Start the session
+
+// Redirect to login if user is not authenticated
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../LogIn/index.php");
     exit();
 }
 
-require_once '../config.php';
+require_once '../config.php'; // Include database configuration
+
+// Check database connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Get user data from database
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT fullname, username, email, password FROM users WHERE id = ?";
 $stmt = $conn->prepare($sql);
@@ -22,6 +27,7 @@ $stmt->close();
 $error_msg = "";
 $success_msg = "";
 
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $new_fullname = trim($_POST['fullname']);
     $new_username = trim($_POST['username']);
@@ -29,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $current_password = $_POST['current_password'] ?? '';
     $new_password = $_POST['new_password'] ?? '';
 
-    // Έλεγχος username
+    // Check if username already exists (excluding current user)
     $check_sql = "SELECT id FROM users WHERE username = ? AND id != ?";
     $check_stmt = $conn->prepare($check_sql);
     $check_stmt->bind_param("si", $new_username, $user_id);
@@ -41,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $check_stmt->close();
 
-        // Έλεγχος email
+        // Check if email already exists (excluding current user)
         $check_sql = "SELECT id FROM users WHERE email = ? AND id != ?";
         $check_stmt = $conn->prepare($check_sql);
         $check_stmt->bind_param("si", $new_email, $user_id);
@@ -53,12 +59,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $check_stmt->close();
 
-            // Έλεγχος αλλαγής password
+            // Handle password change
             $update_password = false;
             if (!empty($current_password) || !empty($new_password)) {
+                // Validate new password length
                 if (strlen($new_password) < 6) {
                     $error_msg = "New password must be at least 6 characters.";
-                } elseif (!password_verify($current_password, $db_password)) {
+                } 
+                // Verify current password
+                elseif (!password_verify($current_password, $db_password)) {
                     $error_msg = "Current password is incorrect.";
                 } else {
                     $update_password = true;
@@ -66,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-            // Αν δεν υπάρχει error, ενημέρωση στη βάση
+            // If no errors, update user data in database
             if (empty($error_msg)) {
                 if ($update_password) {
                     $update_sql = "UPDATE users SET fullname = ?, username = ?, email = ?, password = ? WHERE id = ?";
@@ -80,18 +89,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $update_stmt->execute();
                 $update_stmt->close();
 
-                // Ενημέρωση session
+                // Update session variables
                 $_SESSION['fullname'] = $new_fullname;
                 $_SESSION['username'] = $new_username;
                 $_SESSION['email'] = $new_email;
 
-                // Επιτυχής ενημέρωση
+                // Success message
                 $success_msg = "Profile updated successfully!";
                 $fullname = $new_fullname;
                 $username = $new_username;
                 $email = $new_email;
 
-                // Redirect στο home
+                // Redirect to home page
                 header("Location: ../Home/home.php");
                 exit();
             }
@@ -99,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$conn->close();
+$conn->close(); // Close database connection
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,6 +127,7 @@ $conn->close();
 
     <div class="user-info">
         <?php
+        // Display error or success messages
         if (!empty($error_msg)) echo "<p class='error-msg'>$error_msg</p>";
         if (!empty($success_msg)) echo "<p class='success-msg'>$success_msg</p>";
         ?>

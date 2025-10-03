@@ -1,3 +1,4 @@
+/* Set base font and background for the whole page */
 body {
     font-family: Arial, sans-serif;
     background: #f4f6f8;
@@ -5,6 +6,7 @@ body {
     padding: 0;
 }
 
+/* Style for the header section */
 .header {
     background-color: #4CAF50;
     color: white;
@@ -12,6 +14,7 @@ body {
     text-align: center;
 }
 
+/* Container for user information */
 .user-info {
     background: white;
     max-width: 500px;
@@ -21,16 +24,19 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
+/* Style the form inside user-info */
 .user-info form {
     display: flex;
     flex-direction: column;
 }
 
+/* Style for labels in the form */
 .user-info label {
     margin-top: 10px;
     font-weight: bold;
 }
 
+/* Style for input fields in the form */
 .user-info input {
     padding: 10px;
     margin-top: 5px;
@@ -38,6 +44,7 @@ body {
     border: 1px solid #ccc;
 }
 
+/* Style for buttons in the form */
 .user-info button {
     margin-top: 20px;
     padding: 12px;
@@ -49,19 +56,23 @@ body {
     cursor: pointer;
 }
 
+/* Button hover effect */
 .user-info button:hover {
     background-color: #45a049;
 }
 
+/* Style for horizontal rule */
 hr {
     margin: 20px 0;
 }
 
+/* Style for error messages */
 .error-msg {
     color: red;
     font-weight: bold;
 }
 
+/* Style for success messages */
 .success-msg {
     color: green;
     font-weight: bold;
